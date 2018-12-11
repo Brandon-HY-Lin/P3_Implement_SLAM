@@ -99,16 +99,19 @@ class robot:
         ##    as list.append([index, dx, dy]), this format is important for data creation done later
         
         for index, landmark in enumerate(self.landmarks):
-            dx = self.measurement_range + self.rand() * self.measurement_noise
-            dy = self.measurement_range + self.rand() * self.measurement_noise
+            sensor_dx = self.measurement_range + self.rand() * self.measurement_noise
+            sensor_dy = self.measurement_range + self.rand() * self.measurement_noise
             
             x_landmark, y_landmark = landmark[0], landmark[1]
             
-            if ((self.x - dx) <= x_landmark) and \
-                 (x_landmark <= (self.x + dx)) and \
-                 ((self.y- dx) <= y_landmark) and \
-                (y_landmark <= (self.y + dy) ):
-                    measurements.append(index)
+            if ((self.x - sensor_dx) <= x_landmark) and \
+                 (x_landmark <= (self.x + sensor_dx)) and \
+                 ((self.y - sensor_dy) <= y_landmark) and \
+                (y_landmark <= (self.y + sensor_dy) ):
+                
+                    dx = self.x - x_landmark
+                    dy = self.y = y_landmark
+                    measurements.append([index, dx, dy])
                 
         
         ## TODO: return the final, complete list of measurements
