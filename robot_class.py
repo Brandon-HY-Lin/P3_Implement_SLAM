@@ -77,7 +77,14 @@ class robot:
             One item in the returned list should be in the form: [landmark_index, dx, dy].
             '''
            
+        if self.measurement_range == -1.0:
+            measurements = np.arange(len(self.landmarks))
+            
+            return measurements
+        
+        
         measurements = []
+        
         
         ## TODO: iterate through all of the landmarks in a world
         
@@ -86,9 +93,23 @@ class robot:
         ## 2. account for measurement noise by *adding* a noise component to dx and dy
         ##    - The noise component should be a random value between [-1.0, 1.0)*measurement_noise
         ##    - Feel free to use the function self.rand() to help calculate this noise component
+        ##    - It may help to reference the `move` function for noise calculation
         ## 3. If either of the distances, dx or dy, fall outside of the internal var, measurement_range
         ##    then we cannot record them; if they do fall in the range, then add them to the measurements list
         ##    as list.append([index, dx, dy]), this format is important for data creation done later
+        
+        for index, landmark in enumerate(self.landmarks):
+            dx = self.measurement_range + self.rand() * self.measurement_noise
+            dy = self.measurement_range + self.rand() * self.measurement_noise
+            
+            x_landmark, y_landmark = landmark[0], landmark[1]
+            
+            if ((self.x - dx) <= x_landmark) and \
+                 (x_landmark <= (self.x + dx)) and \
+                 ((self.y- dx) <= y_landmark) and \
+                (y_landmark <= (self.y + dy) ):
+                    measurements.append(index)
+                
         
         ## TODO: return the final, complete list of measurements
         return measurements
